@@ -22,7 +22,7 @@ summary(aov(PM2.5~month, data = all_month))
 
 bartlett.test(PM2.5~month, data = all_month)
 #install.packages("agricolae")
-install.packages("laercio")
+#install.packages("laercio")
 library(agricolae)
 library(laercio)
 aov_model <- aov(PM2.5~month, data = all_month)
@@ -75,11 +75,56 @@ summary(model_log)
 plot(model_log, which = 1 )
 plot(model_log, which = 2 )
 
-
+## Decision Tree 01
 library(rpart)
 
 mp <- rpart(PM2.5 ~ pressure + humidity + wind_direction + wind_speed + weather, data = all_month)
-summary(mp)
-plot(mp)
 
-predict(mp, all_month)
+pr2 <- predict(mp, all_month)
+pr2
+
+imputed_PM2 <- na.approx(all_month$PM2.5)
+smape(imputed_PM2, pr2)
+
+
+## Decision Tree 02 (temperature added)
+mp2 <- rpart(PM2.5 ~ temperature + pressure + humidity + wind_direction + wind_speed + weather, data = all_month)
+
+pr3 <- predict(mp2, all_month)
+smape(imputed_PM2, pr3)
+
+
+## Decision Tree 03 (Hour added)
+library(tidyr)
+all_month_time_separated <- all_month %>% mutate(time = utc_time) %>% separate(time, c("y","m","d","h"))
+mp4 <- rpart(PM2.5 ~ temperature + pressure + humidity + wind_direction + wind_speed + weather + m + d + h, data = all_month_time_separated)
+pr4 <- predict(mp4, all_month_time_separated)
+smape(imputed_PM2, pr4)
+
+## random forest 01 (Month Day Hour)
+library(randomForest)
+mp5 <- randomForest(PM2.5 ~ temperature + pressure + humidity + wind_direction + wind_speed + weather + m + d + h, data = na.omit(all_month_time_separated))
+pr5 <- predict(mp5, all_month_time_separated)
+smape(imputed_PM2, pr5)
+summary(mp5)
+mp5$importance
+## parallel process reference
+#rf <- foreach(ntree=rep(25000, 6), .combine=combine, .multicombine=TRUE,
+#             .packages='randomForest') %dopar% {
+ #               randomForest(x, y, ntree=ntree)
+ #             }
+
+# github weekly install version
+#install.packages("drat", repos="https://cran.rstudio.com")
+#drat:::addRepo("dmlc")
+#install.packages("xgboost", repos="http://dmlc.ml/drat/", type = "source")
+
+install.packages("xgboost")
+library(xgboost)
+
+str(train)
+bstSparse <- xgboost(data = train$data, label = train$label, max_depth = 2, eta = 1, nthread = 2, nrounds = 2, objective = "binary:logistic")
+dtrain <- xgb.DMatrix(data = train$data, label = train$label)
+bstDMatrix <- xgboost(data = dtrain, max_depth = 2, eta = 1, nthread = 2, nrounds = 2, objective = "binary:logistic")
+bst <- xgboost(data = dtrain, max_depth = 2, eta = 1, nthread = 2, nrounds = 2, objective = "binary:logistic", verbose = 0)
+pred <- predict(bst, test$data)

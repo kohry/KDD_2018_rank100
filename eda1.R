@@ -47,6 +47,7 @@ plot(slm_000_daxing, which=2)
 
 pr <- predict(slm_000_daxing, j000_daxing)
 
+# imputing
 v_imputed_pm2 <- na.approx(j000_daxing$PM2)
 
 smape(v_imputed_pm2, pr)
