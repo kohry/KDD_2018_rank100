@@ -1,0 +1,47 @@
+```{r}
+setwd("C://projectbuffer//contest")
+
+install.packages("tidyr")
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+b_aq_simple <- read.csv("beijing_17_18_aq.csv")
+b_meo_simple <- read.csv("beijing_17_18_meo.csv")
+
+b_aq_raw <- read.csv("beijing_historical_meo_grid.csv")
+
+glimpse(b_aq_raw)
+
+grid000 <- b_aq_raw %>% filter(stationName == "beijing_grid_000")
+grid000_time <- separate(grid000, utc_time, c("y","m","d","h"))
+
+daxing_aq <- b_aq_simple %>% filter(stationId == "daxing_aq")
+
+str(daxing_aq)
+str(grid000_time)
+
+j000_daxing_t <- inner_join(daxing_aq, grid000, by = c("utc_time"))
+j000_daxing <- j000_daxing_t %>% separate(utc_time, c("y","m","d","h"))
+
+str(j000_daxing)
+
+lm_000_daxing <- lm(PM2.5 ~ temperature + pressure + humidity + wind_direction + wind_speed.kph + m + h + d , data = j000_daxing)
+
+
+
+```
+
+```{r}
+summary(lm_000_daxing)
+```
+
+```{r}
+sort(lm_000_daxing$coefficients)
+```
+
+
+
+
+
