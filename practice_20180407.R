@@ -16,6 +16,8 @@ all %>% group_by(weather) %>% summarise(mean(PM2.5, na.rm = T))
 
 all_month <- all %>% mutate(month = as.factor(substr(utc_time, 6,7))) %>% filter(wind_direction < 361)
 str(all_month)
+summary(all_month)
+
 
 summary(aov(PM2.5~weather, data = all))
 summary(aov(PM2.5~month, data = all_month))
@@ -108,23 +110,3 @@ pr5 <- predict(mp5, all_month_time_separated)
 smape(imputed_PM2, pr5)
 summary(mp5)
 mp5$importance
-## parallel process reference
-#rf <- foreach(ntree=rep(25000, 6), .combine=combine, .multicombine=TRUE,
-#             .packages='randomForest') %dopar% {
- #               randomForest(x, y, ntree=ntree)
- #             }
-
-# github weekly install version
-#install.packages("drat", repos="https://cran.rstudio.com")
-#drat:::addRepo("dmlc")
-#install.packages("xgboost", repos="http://dmlc.ml/drat/", type = "source")
-
-install.packages("xgboost")
-library(xgboost)
-
-str(train)
-bstSparse <- xgboost(data = train$data, label = train$label, max_depth = 2, eta = 1, nthread = 2, nrounds = 2, objective = "binary:logistic")
-dtrain <- xgb.DMatrix(data = train$data, label = train$label)
-bstDMatrix <- xgboost(data = dtrain, max_depth = 2, eta = 1, nthread = 2, nrounds = 2, objective = "binary:logistic")
-bst <- xgboost(data = dtrain, max_depth = 2, eta = 1, nthread = 2, nrounds = 2, objective = "binary:logistic", verbose = 0)
-pred <- predict(bst, test$data)

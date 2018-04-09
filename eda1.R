@@ -52,5 +52,5 @@ v_imputed_pm2 <- na.approx(j000_daxing$PM2)
 
 smape(v_imputed_pm2, pr)
 
-str(j000_daxing)
+
 
