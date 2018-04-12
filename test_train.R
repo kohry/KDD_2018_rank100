@@ -27,17 +27,7 @@ imputed_PM25_a <- na.approx(test_w$PM2.5)
 smape(imputed_PM25_a, pr7)
 importance(mp7)
 
-# linear regression
-mp8 <- lm(PM2.5 ~ temperature + pressure + humidity + wind_direction + wind_speed + weather + h + day, data = na.omit(train_w))
-summary(mp8)
-pr8 <- predict(mp8, test_w)
-imputed_PM25_b <- na.approx(test_w$PM2.5)
-smape(imputed_PM25_b, pr8)
-
-
-
 # XGBoost
-
 onehot_h <- model.matrix(~h-1,raw_w )
 onehot_weather <- model.matrix(~weather-1,raw_w )
 onehot_day <- model.matrix(~day-1, raw_w)
