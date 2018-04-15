@@ -42,40 +42,67 @@ raw_lag <- raw_lag[-c(1:101),]
 # XGBoost
 # 1) CATEGORICAL VARIABLE MUTATE
 onehot_h <- model.matrix(~h-1,raw_lag )
-onehot_weather <- model.matrix(~weather-1,raw_lag ) %>% mutate(weatherSunny = weatehrSunny/clear)
+onehot_weather <- model.matrix(~weather-1,raw_lag )
 onehot_day <- model.matrix(~day-1, raw_lag)
 
 # 2) FEATURE SELECT
 raw_onehot <- cbind(raw_lag, onehot_h, onehot_weather, onehot_day) %>% select(-stationId, -utc_time, -PM10, -NO2, -CO, -O3, -SO2, -station_id, -longitude, -latitude, -weather, -y, -m, -d, -h, -day) %>% mutate(humidity = as.numeric(humidity)) 
 colnames(raw_onehot)[which(names(raw_onehot) == "weatherSunny/clear")] <- "weatherSunny"
 
-for (index in 1:50) {
-  string_lag_selection <- paste("raw_onehot_lag"," <- raw_onehot %>% select(PM2.5, temperature, pressure, humidity, wind_direction, wind_speed, h00, h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, h21,h22,h23, weatherDust, weatherFog, weatherHaze, weatherRain, weatherSand, weatherSleet, weatherSnow, weatherSunny, daySun, dayMon, dayTue, dayWed, dayThu, dayFri, daySat, lag",index,")", sep="")
+results <- matrix(nrow = 50, ncol= 100)
+
+for (i in 1:50) {
+
+  for (ii in 1:50) {
+    
+    print(ii)
+    
+    string_lag_selection <- paste("raw_onehot_lag"," <- raw_onehot %>% select(lag",ii,",PM2.5, temperature, pressure, humidity, wind_direction, wind_speed, h00, h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, h21,h22,h23, weatherDust, weatherFog, weatherHaze, weatherRain, weatherSand, weatherSleet, weatherSnow, weatherSunny, daySun, dayMon, dayTue, dayWed, dayThu, dayFri, daySat)", sep="")
+    
+    eval(parse(text = string_lag_selection))
+    
+    raw_matrix <- data.matrix(raw_onehot_lag)
+    
+    # 3) SAMPLING
+    s <- 0.7 * nrow(raw_lag)
+    index <- sample(1:nrow(raw_lag), s, replace=F)
+    print(s)
+    data_train <- raw_matrix[index,-1]
+    data_train_label <- na.fill(raw_matrix[index,1], "extend")
+    data_test <- raw_matrix[-index,-1]
+    data_test_label <- na.fill(raw_matrix[-index,1], "extend")
+    
+    print(length(data_train_label))
+    print(nrow(data_train))
+    
+    # 4) XGBOOST MATRIX CONVERSION
+    dtrain <- xgb.DMatrix(data = data_train, label = data_train_label)
+    
+    
+    
+    # 5) MODELING
+    xmodel2 <- xgboost(data = data_train, label = data_train_label, nround = i, objective="reg:linear")
+    
+    # 6) PREDICT
+    pred_xgba <- predict(xmodel2, data_test)
+    
+    # 7) SMAPE
+    m <- smape(data_test_label, pred_xgba)
+    print(m)
+    results[ii,i] <- m
+    
+  }
   
-  eval(parse(text = string_lag_selection))
-  
-  raw_matrix <- data.matrix(raw_onehot_lag)
-  
-  # 3) SAMPLING
-  index <- sample(1:nrow(raw_lag), 0.7 * nrow(raw_lag), replace=F)
-  
-  data_train <- raw_matrix[index,-1]
-  data_train_label <- na.approx(raw_matrix[index,1])
-  data_test <- raw_matrix[-index,-1]
-  data_test_label <- na.approx(raw_matrix[-index,1])
-  
-  # 4) XGBOOST MATRIX CONVERSION
-  dtrain <- xgb.DMatrix(data = data_train, label = data_train_label)
-  
-  # 5) MODELING
-  xmodel2 <- xgboost(data = data_train, label = data_train_label, nround = 10, objective="reg:linear")
-  
-  # 6) PREDICT
-  pred_xgba <- predict(xmodel2, data_test)
-  
-  # 7) SMAPE
-  print(smape(data_test_label, pred_xgba))
 }
 
+
+
+
+
+#str(data_train_label)
+#str(data_train)
+
+#length(data_train_label)
+#nrow(data_train)
 #################################################################################################
 
