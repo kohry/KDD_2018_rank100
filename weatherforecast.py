@@ -23,11 +23,12 @@ def read_file():
 def get_temp(cityzipcode):
 
     encText = urllib.parse.quote(city.encode('utf-8'))
-    countrycode = "cn"
 
     ##  <REPLACE this key with your own api key. openweathermap.org > ## 
-    apiKey = "" 
-    url = "http://api.openweathermap.org/data/2.5/forecast?zip=" + cityzipcode + "," + countrycode + "&appid=" + apiKey 
+    lat = "35"
+    lon = "135"
+    apiKey = "22d4ef82c7c5db24d5cbbf52088974f5" 
+    url = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon" + lon + "&appid=" + apiKey 
     
     request = urllib.request.Request(url)
     response = urllib.request.urlopen(request)
