@@ -14,6 +14,8 @@ setwd("C://projectbuffer//contest")
 df_aq_simple <- read.csv("beijing_17_18_aq.csv") %>% filter(stationId == "daxing_aq")
 df_meo_simple <- read.csv("beijing_17_18_meo.csv") %>% filter(station_id == "daxing_meo")
 
+str(df_meo_simple)
+
 ##TIME, DAY 
 raw <- inner_join(df_aq_simple, df_meo_simple, by=c("utc_time"))
 raw_time <- raw %>% mutate(time = utc_time) %>% separate(time, c("y","m","d","h")) %>% mutate(wind_direction = ifelse(wind_direction > 361, 0, wind_direction))
