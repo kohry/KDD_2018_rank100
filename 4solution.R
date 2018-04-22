@@ -16,15 +16,10 @@ forecast <- read.csv("weather_forecast.csv")
 current <- read.csv("weather_current.csv")
 pollution <- read.csv("weather_pollution.csv")
 
-str(forecast)
-str(current)
-str(pollution)
-str(bulk)
-
-## 여기서부터 로직짜야함.
-
 ## station ID 는 뭐 해야햄.
 bulk <- read.csv("bulk.csv") %>% filter(stationId == 1786458)
+
+city_list <- c('dongsi_aq',	'tiantan_aq',	'guanyuan_aq',	'wanshouxigong_aq',	'aotizhongxin_aq',	'nongzhanguan_aq',	'wanliu_aq',	'beibuxinqu_aq',	'zhiwuyuan_aq',	'fengtaihuayuan_aq',	'yungang_aq',	'gucheng_aq',	'fangshan_aq',	'daxing_aq',	'yizhuang_aq',	'tongzhou_aq',	'shunyi_aq',	'pingchang_aq',	'mentougou_aq',	'pinggu_aq',	'huairou_aq',	'miyun_aq',	'yanqin_aq',	'dingling_aq',	'badaling_aq',	'miyunshuiku_aq',	'donggaocun_aq',	'yongledian_aq',	'yufa_aq',	'liulihe_aq',	'qianmen_aq',	'yongdingmennei_aq',	'xizhimenbei_aq',	'nansanhuan_aq',	'dongsihuan_aq',	'BX9',	'BX1',	'BL0',	'CD9',	'CD1',	'CT2',	'CT3',	'CR8',	'GN0',	'GR4',	'GN3',	'GR9',	'GB0',	'HR1',	'HV1',	'LH0',	'KC1',	'KF1')
 
 
 ## 이것도 
@@ -40,14 +35,6 @@ raw_w$day <- wday(raw_w$utc_time, label = T, locale="english")
 index <- sample(1:nrow(raw_w), 0.7 * nrow(raw_w), replace=F)
 train_w <- raw_w[index,]
 test_w <- raw_w[-index,]
-
-# random forest 02 / 43.82
-
-mp7 <- randomForest(PM2.5 ~ temperature + pressure + humidity + wind_direction + wind_speed + weather + h + m + day, data = na.omit(train_w))
-pr7 <- predict(mp7, test_w)
-imputed_PM25_a <- na.approx(test_w$PM2.5)
-smape(imputed_PM25_a, pr7)
-importance(mp7)
 
 # XGBoost
 onehot_h <- model.matrix(~h-1,raw_w )

@@ -1,0 +1,60 @@
+,station,city_id,city_name,city_coord_lat,city_coord_long
+0,dongsi_aq,2038349,Beijing Shi,39.9169,116.3971
+0,tiantan_aq,1816670,Beijing,39.9075,116.3972
+0,guanyuan_aq,7869868,ChangQiao,39.9299,116.3802
+0,wanshouxigong_aq,1816670,Beijing,39.9075,116.3972
+0,aotizhongxin_aq,7869868,ChangQiao,39.9299,116.3802
+0,nongzhanguan_aq,2038349,Beijing Shi,39.9169,116.3971
+0,wanliu_aq,1809104,Haidian,39.9792,116.2992
+0,beibuxinqu_aq,1912044,Xianghuangnanying,39.9669,116.2064
+0,zhiwuyuan_aq,1912044,Xianghuangnanying,39.9669,116.2064
+0,fengtaihuayuan_aq,1785941,Yuegezhuang,39.8833,116.2667
+0,yungang_aq,1787768,Yamenkou,39.8828,116.2003
+0,gucheng_aq,1795254,Shijingshan,39.9111,116.1811
+0,fangshan_aq,1803948,Liangxiang,39.7319,116.14
+0,daxing_aq,1807544,Daxing,39.7214,116.3292
+0,yizhuang_aq,1813226,Dayangfang,39.8192,116.5031
+0,tongzhou_aq,1792520,Tongzhou,39.9053,116.5994
+0,shunyi_aq,2034754,Shunyi,40.125,116.6453
+0,pingchang_aq,2038154,Changping,40.2186,116.2197
+0,mentougou_aq,1800657,Mentougou,39.9392,116.0917
+0,pinggu_aq,2035469,Pinggu,40.1333,117.1167
+0,huairou_aq,2036766,Huairou,40.3133,116.6289
+0,miyun_aq,2035742,Miyun,40.3697,116.8433
+0,yanqin_aq,2033458,Yanqing,40.4667,115.9667
+0,dingling_aq,2038154,Changping,40.2186,116.2197
+0,badaling_aq,2033458,Yanqing,40.4667,115.9667
+0,miyunshuiku_aq,2035742,Miyun,40.3697,116.8433
+0,donggaocun_aq,2035469,Pinggu,40.1333,117.1167
+0,yongledian_aq,1804540,Langfang,39.5097,116.6947
+0,yufa_aq,1807544,Daxing,39.7214,116.3292
+0,liulihe_aq,1912147,Yuzhuang,39.6775,116.0583
+0,qianmen_aq,1816670,Beijing,39.9075,116.3972
+0,yongdingmennei_aq,1816670,Beijing,39.9075,116.3972
+0,xizhimenbei_aq,7869868,ChangQiao,39.9299,116.3802
+0,nansanhuan_aq,1816670,Beijing,39.9075,116.3972
+0,dongsihuan_aq,2038349,Beijing Shi,39.9169,116.3971
+0,BX9,2655774,Bexleyheath,51.4629,0.1394
+0,BX1,2655774,Bexleyheath,51.4629,0.1394
+0,BL0,2643743,London,51.5085,-0.1258
+0,CD9,3345437,Camden Town,51.5406,-0.1434
+0,CD1,6690581,Belsize Park,51.5477,-0.1723
+0,CT2,2643741,City of London,51.5128,-0.0919
+0,CT3,2643744,City of London,51.5133,-0.0891
+0,CR8,3333163,Lambeth,51.4167,-0.1334
+0,GN0,2633583,Woolwich,51.491,0.0648
+0,GR4,2650042,Eltham,51.4506,0.0523
+0,GN3,7302135,Abbey Wood,51.4869,0.1075
+0,GR9,2645726,Kidbrooke,51.4672,0.0271
+0,GB0,2650042,Eltham,51.4506,0.0523
+0,HR1,2637063,Stanmore,51.6167,-0.3167
+0,HV1,6690805,Elm Park,51.5497,0.2014
+0,LH0,3333154,Hillingdon,51.5,-0.45
+0,KC1,2641168,Notting Hill,51.5115,-0.2059
+0,KF1,2641168,Notting Hill,51.5115,-0.2059
+0,LW2,3333166,Lewisham,51.4535,-0.018
+0,RB7,3333185,Redbridge,51.5667,0.0833
+0,TD5,2647550,Hampton,51.4211,-0.3669
+0,ST5,3333140,Croydon,51.3766,-0.1058
+0,TH4,2640091,Poplar,51.5111,-0.0157
+0,MY7,2640692,Paddington,51.5156,-0.1764

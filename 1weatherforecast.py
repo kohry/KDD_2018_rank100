@@ -65,8 +65,6 @@ def get_info(station, lat, lon):
         raw = json.loads(result)
         try :
 
-            dd = {'stationId':[],'date':[],'temperature':[],'pressure':[],'humidity':[],'weather':[],'weather_code':[],'weather_desc':[],'weather_cloud':[],'weather_rain':[],'wind_speed':[],'wind_direction':[]}
-
             for ii in range(25) :
             # get temperature from returned json list
             # <REPLACE node with this if needed>
@@ -79,6 +77,7 @@ def get_info(station, lat, lon):
                 weather_code = raw['list'][ii]['weather'][0]['id']
                 weather_desc = raw['list'][ii]['weather'][0]['description']
                 weather_cloud = raw['list'][ii]['clouds']['all']
+
                 weather_rain = 0
                 try :
                     weather_rain = raw['list'][ii]['rain']['3h']
@@ -92,6 +91,7 @@ def get_info(station, lat, lon):
                     wind_direction = raw['list'][ii]['wind']['deg']
                 except:
                     wind_direction = round(random.random()*360)
+
                 
                 df = pandas.DataFrame([[stationId, date, temperature, pressure, humidity, weather, weather_code, weather_desc, weather_cloud, weather_rain, wind_speed, wind_direction]], columns=['stationId','date','temperature','pressure','humidity','weather','weather_code','weather_desc','weather_cloud','weather_rain','wind_speed','wind_direction'])
                 print(df)   
