@@ -11,6 +11,7 @@ import datetime
 import traceback
 import random
 from io import StringIO
+import time
 
 
 def get_info(urlgo):
@@ -55,8 +56,8 @@ out = pandas.DataFrame()
 merge = pandas.DataFrame()
 
 try :
-    out1 = get_info("https://biendata.com/competition/airquality/ld/2018-04-17-0/2018-05-31-23/2k0d1d8")
-    out2 = get_info("https://biendata.com/competition/airquality/bj/2018-04-17-0/2018-05-31-23/2k0d1d8")
+    out1 = get_info("https://biendata.com/competition/airquality/ld/2018-04-23-0/2018-05-31-23/2k0d1d8")
+    out2 = get_info("https://biendata.com/competition/airquality/bj/2018-04-23-0/2018-05-31-23/2k0d1d8")
 
     merge = pandas.concat([out1, out2])
     
@@ -68,4 +69,5 @@ except Exception as e:
 
 finally : 
     write_csv_from_df(merge,"weather_pollution.csv")
+    write_csv_from_df(merge,"weather_pollution" + str(time.time()) + ".csv")
     print("-----------end-------------")
