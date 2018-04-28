@@ -30,7 +30,7 @@ iilag = 1
 while (iii <= length(city_list)) {
   
   ## 이부분 루프돌기
-  df_aq_simple <- read.csv("london_aq.csv") %>% filter(stationId == city_list[iii])
+  df_aq_simple <- read.csv("london_aq.csv") %>% filter(stationId == city_list[iii]) %>% mutate(utc_time = as.factor(as.POSIXct(utc_time)))
   iilag = 1
   
   while (iilag <= 55) {

@@ -10,6 +10,7 @@ import pandas
 import datetime
 import traceback
 import random
+import time
 
 class Location :
     lat = 0
@@ -144,4 +145,5 @@ except :
 
 finally : 
     write_csv_from_df(out, "./weather_forecast.csv")
+    write_csv_from_df(out,"weather_forecast" + str(time.time()) + ".csv")
     print("-----------end-------------")

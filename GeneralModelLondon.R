@@ -26,7 +26,7 @@ bulk_london <- read.csv("bulk.csv") %>% filter(stationId == 2643743)
 smapes <- matrix(nrow = 40, ncol = 55)
 
 ## 이부분 루프돌기
-df_aq_simple <- read.csv("london_aq.csv")
+df_aq_simple <- read.csv("london_aq.csv") %>% mutate(utc_time = as.factor(as.POSIXct(utc_time)))
 
 start_time <- Sys.time()
 

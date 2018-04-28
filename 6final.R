@@ -4,7 +4,6 @@ library(xgboost)
 library(lubridate)
 library(tidyverse)
 library(zoo)
-library(randomForest)
 library(xts)
 
 ##문제가있다!
@@ -81,7 +80,7 @@ lag <- c()
 #lags <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("date", "stationId", "PM2.5", "O3","lag"))
 lags <- data.frame(date = character(), stationId = character(), PM2.5 = numeric(), PM10 = numeric(), O3 = numeric(), lag = numeric(), stringsAsFactors = F)
 
-tail(pollution %>% filter(stationId == "yongledian_aq") %>% arrange(date))
+head(pollution %>% filter(stationId == "yongledian_aq") %>% arrange(date))
 
 #각각의 최대 거시기를 뽑아줌. (각각 도시마다 최근 관측된 오염도가 다르니 이걸 탐지하고 lag를 뽑아줌.)
 for (ind in 1:length(city_list)) {
@@ -164,13 +163,17 @@ for (icity in 1:length(city_list_china)) {
     lagindex <- (iter + as.numeric(d2$lag[1]) - 1)
     str <- ifelse(is.na(lagindex) | lagindex > 55, "xgbII_model_china_general", paste("xgbII_model_china",icity,lagindex, sep="_")) 
     
-    currentCursor <- rbind(d5_matrix[iter,],d5_matrix[iter,])
+    if (str == "xgbII_model_china_general") {
+      currentCursor = rbind(d5_matrix[iter,-6],d5_matrix[iter,-6])
+    } else {
+      currentCursor = rbind(d5_matrix[iter,],d5_matrix[iter,])
+    }
     
     model <- xgb.load(str)
     result <- predict(model, currentCursor)
     printindex <- (48 * (icity - 1) + iter)
     
-    sub[printindex, c("PM2.5")] = ifelse(result[1] < 0, 0, result[1])
+    sub[printindex, c("PM2.5")] = ifelse(result[1] < 0, 1, result[1])
     
   }
   
@@ -218,15 +221,20 @@ for (icity in 36:48) {
   for(iter in 1:48) {
     
     lagindex <- (iter + as.numeric(d2$lag[1]) - 1)
-    str <- "xgbII_model_london_general"  ##RRRRRR ifchanged,
+    #str <- "xgbII_model_london_general"  ##RRRRRR ifchanged,
+    ifelse(is.na(lagindex) | lagindex > 55, "xgbII_model_london_general", paste("xgbII_model_london",icity,lagindex, sep="_")) 
     
-    currentCursor <- rbind(d5_matrix[iter,],d5_matrix[iter,])
+    if (str == "xgbII_model_london_general") {
+      currentCursor = rbind(d5_matrix[iter,-6],d5_matrix[iter,-6])
+    } else {
+      currentCursor = rbind(d5_matrix[iter,],d5_matrix[iter,])
+    }
     
     model <- xgb.load(str)
     result <- predict(model, currentCursor)
     printindex <- (48 * (icity - 1) + iter)
     
-    sub[printindex, c("PM2.5")] = ifelse(result[1] < 0, 0, result[1])
+    sub[printindex, c("PM2.5")] = ifelse(result[1] < 0, 1, result[1])
     
   }
   
@@ -254,7 +262,7 @@ for (icity in 1:length(city_list_china)) {
   onehot_weather <- model.matrix(~weather-1,d3 )
   onehot_day <- model.matrix(~day-1, d3)
   
-  pia = (48 * (icity)) +1
+  pia = (48 * (icity - 1)) +1
   
   for(aax in 1:48) {
     iix <- which(weatherlevel == weathers[aax])
@@ -282,7 +290,7 @@ for (icity in 1:length(city_list_china)) {
     result <- predict(model, currentCursor)
     printindex <- (48 * (icity - 1) + iter)
     
-    sub[printindex, c("PM10")] = ifelse(result[1] < 0, 0, result[1])
+    sub[printindex, c("PM10")] = ifelse(result[1] < 0, 1, result[1])
     
   }
   
@@ -311,7 +319,7 @@ for (icity in 36:48) {
   onehot_weather <- model.matrix(~weather-1,d3 )
   onehot_day <- model.matrix(~day-1, d3)
   
-  pia = (48 * (icity)) +1
+  pia = (48 * (icity - 1)) +1
   
   for(aax in 1:48) {
     iix <- which(weatherlevel == weathers[aax])
@@ -340,7 +348,7 @@ for (icity in 36:48) {
     result <- predict(model, currentCursor)
     printindex <- (48 * (icity - 1) + iter)
     
-    sub[printindex, c("PM10")] = ifelse(result[1] < 0, 0, result[1])
+    sub[printindex, c("PM10")] = ifelse(result[1] < 0, 1, result[1])
     
   }
   
@@ -382,14 +390,16 @@ for (icity in 1:length(city_list_china)) {
   
   d5_matrix <- data.matrix(d4_onehot)
   
-  d5_matrix
-  
   for(iter in 1:48) {
     
     lagindex <- (iter + as.numeric(d2$lag[1]) - 1)
     str <- ifelse(is.na(lagindex) | lagindex > 55, "xgbII_model_O3_general_without_pm2", paste("xgbII_model_china_O3",icity,lagindex, sep="_")) 
     
-    currentCursor <- rbind(d5_matrix[iter,],d5_matrix[iter,])
+    if (str == "xgbII_model_O3_general_without_pm2") {
+      currentCursor = rbind(d5_matrix[iter,-6],d5_matrix[iter,-6])
+    } else {
+      currentCursor = rbind(d5_matrix[iter,],d5_matrix[iter,])
+    }
     
     model <- xgb.load(str)
     result <- predict(model, currentCursor)

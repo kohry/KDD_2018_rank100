@@ -48,10 +48,10 @@ raw_matrix <- data.matrix(raw_onehot)
 
 index <- sample(1:nrow(raw_matrix), 0.9 * nrow(raw_matrix), replace=F)
 
-data_train <- raw_matrix[index,-2]
+data_train <- raw_matrix[index,-c(1,2)]
 data_train_label <- na.approx(raw_matrix[index,2])
 
-data_test <- raw_matrix[-index,-2]
+data_test <- raw_matrix[-index,-c(1,2)]
 data_test_label <- raw_matrix[-index,2] %>% na.locf(na.rm = F) %>% na.locf(na.rm = F, fromLast = T) %>% na.approx(na.rm = F)
 
 dtrain <- xgb.DMatrix(data = data_train, label = data_train_label)
