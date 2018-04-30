@@ -1,0 +1,14 @@
+00 4 * * 0 /backup.sh
+
+10 20-22 * * * python3 /root/1weatherforecast.py >> /var/log/cron.log
+
+05 0-23 * * * python3 /root/3weatherpollution.py >> /var/log/cron.log
+35 0-23 * * * python3 /root/3weatherpollution.py >> /var/log/cron.log
+
+50 21 * * * /usr/bin/Rscript /root/linux/6final.R >> /var/log/cron.log
+30 8 * * * /usr/bin/Rscript /root/linux/6final.R >> /var/log/cron.log
+10 8 * * * /usr/bin/Rscript /root/linux/6final_pre.R >> /var/log/cron.log
+
+41 15 * * * /usr/bin/Rscript /root/linux/testing.R >> /var/log/cron.log
+
+52 0-23 * * * /usr/bin/Rscript /root/test.R >> /var/log/cron.log
